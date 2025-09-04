@@ -10,7 +10,6 @@ A WPF file browser application built with C# .NET Framework 4.8 using the MVVM d
 - **File Operations**: Double-click to open files with default applications or navigate into directories
 - **Keyboard Support**: Press Enter to open selected items
 - **Context Menu**: Right-click for additional actions
-- **Responsive UI**: Clean, modern interface with proper error handling
 
 ## Architecture
 
