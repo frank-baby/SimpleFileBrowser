@@ -22,7 +22,11 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="Path:" Target="{Binding ElementName=txtPath}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBox x:Name="txtPath" Grid.Column="1" Text="{Binding CurrentPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtPath" Grid.Column="1" Text="{Binding CurrentPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0" VerticalAlignment="Center">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Return" Command="{Binding GoCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
             <Button Grid.Column="2" Content="Go" Command="{Binding GoCommand}" VerticalAlignment="Center"/>
 
             <Label Grid.Row="1" Grid.Column="0"  Content="Filter:" Target="{Binding ElementName=txtFilter}" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -36,6 +40,8 @@
             MouseAction="LeftDoubleClick"
             Command="{Binding OpenItemCommand}"
             CommandParameter="{Binding SelectedItem/}"/>
+                <KeyBinding Key="Return" 
+    Command="{Binding OpenItemCommand}" CommandParameter="{Binding SelectedItem}" />
             </DataGrid.InputBindings>
             <DataGrid.ContextMenu>
                 <ContextMenu>

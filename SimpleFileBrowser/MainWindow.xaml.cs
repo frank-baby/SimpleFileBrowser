@@ -10,7 +10,8 @@ namespace SimpleFileBrowser
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel(new FileSystemService(), new DialogService()); // Dependency Injection
+            DataContext = new MainViewModel(new FileSystemService(), new DialogService()); 
+            // Improvement:Simple Dependency Injection - Needs to be replaced with proper DI container in a real app
         }
     }
 }

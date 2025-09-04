@@ -93,6 +93,9 @@ namespace SimpleFileBrowser
 
                 Items = new ObservableCollection<Item>(items);
             }
+
+            // Improvement: Logging can be added here for better diagnostics
+
             catch (UnauthorizedAccessException)
             {
                 _dialogService.ShowWarning("Access denied to this folder");
