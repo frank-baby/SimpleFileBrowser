@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace SimpleFileBrowser.Tests
     {
         private Mock<IFileSystemService> _mockFileSystemService;
         private Mock<IDialogService> _mockDialogService;
+        private Mock<ILogger<MainViewModel>> _mockLogger;
         private MainViewModel _viewModel;
 
         [TestInitialize]
@@ -20,11 +22,12 @@ namespace SimpleFileBrowser.Tests
         {
             _mockFileSystemService = new Mock<IFileSystemService>();
             _mockDialogService = new Mock<IDialogService>();
+            _mockLogger = new Mock<ILogger<MainViewModel>>();
 
             _mockFileSystemService.Setup(x => x.GetFilteredItemsAsync(It.IsAny<string>(), null))
                 .ReturnsAsync(new List<Item>());
 
-            _viewModel = new MainViewModel(_mockFileSystemService.Object, _mockDialogService.Object);
+            _viewModel = new MainViewModel(_mockFileSystemService.Object, _mockDialogService.Object, _mockLogger.Object);
         }
 
         [TestMethod]
@@ -246,7 +249,7 @@ namespace SimpleFileBrowser.Tests
                 new Item { Name = "File1.txt", IsDirectory = false },
                 new Item { Name = "Folder1", IsDirectory = true }
             };
-            _mockFileSystemService.Setup(x => x.GetFilteredItemsAsync(_viewModel.CurrentPath,"*.*"))
+            _mockFileSystemService.Setup(x => x.GetFilteredItemsAsync(_viewModel.CurrentPath, "*.*"))
                 .ReturnsAsync(testItems);
 
             _viewModel.FilterText = "*.*";
