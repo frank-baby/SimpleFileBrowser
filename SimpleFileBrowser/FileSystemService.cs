@@ -20,7 +20,7 @@ namespace SimpleFileBrowser
         public async Task<IEnumerable<Item>> GetFilteredItemsAsync(string path, string searchPattern = null)
         {
             if (!Directory.Exists(path))
-                return Enumerable.Empty<Item>();
+                throw new DirectoryNotFoundException();
 
             return await Task.Run(() => GetItems(path, searchPattern));
         }

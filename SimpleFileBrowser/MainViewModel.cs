@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -16,12 +17,16 @@ namespace SimpleFileBrowser
 
         private readonly IFileSystemService _fileSystemService;
         private readonly IDialogService _dialogService;
+        private readonly ILogger<MainViewModel> _logger;
 
-        public MainViewModel(IFileSystemService fileSystemService, IDialogService dialogService)
+        public MainViewModel(IFileSystemService fileSystemService,
+            IDialogService dialogService,
+            ILogger<MainViewModel> logger = null
+            )
         {
             _fileSystemService = fileSystemService;
             _dialogService = dialogService;
-
+            _logger = logger;
             CurrentPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             LoadItems();
         }
@@ -93,21 +98,21 @@ namespace SimpleFileBrowser
 
                 Items = new ObservableCollection<Item>(items);
             }
-
-            // Improvement: Logging can be added here for better diagnostics
-
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
+                _logger.LogWarning(ex, "Access denied to folder: {Path}", CurrentPath);
                 _dialogService.ShowWarning("Access denied to this folder");
                 Items = new ObservableCollection<Item>();
             }
-            catch (DirectoryNotFoundException)
+            catch (DirectoryNotFoundException ex)
             {
+                _logger.LogWarning(ex, "Folder not found: {Path}", CurrentPath);
                 _dialogService.ShowWarning("Folder not found");
                 Items = new ObservableCollection<Item>();
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error loading folder: {Path}", CurrentPath);
                 _dialogService.ShowError($"Error loading folder: {ex.Message}");
                 Items = new ObservableCollection<Item>();
             }
@@ -138,6 +143,7 @@ namespace SimpleFileBrowser
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Unable to open item: {Path}", item.FullPath);
                 _dialogService.ShowError($"Unable to open: {ex.Message}");
             }
         }
